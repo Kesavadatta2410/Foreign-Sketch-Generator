@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forensic Sketch Generator</title>
+    <style>
+        body {
+            text-align: center;
+            background: #1e1e2e;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            margin-top: 50px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            display: inline-block;
+        }
+        input, button {
+            padding: 10px;
+            margin: 10px;
+            border: none;
+            border-radius: 5px;
+        }
+        button {
+            cursor: pointer;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: white;
+        }
+        img {
+            margin-top: 10px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Forensic Sketch Generator</h1>
+        <input type="text" id="description" placeholder="Describe the suspect..." />
+        <button onclick="generateSketch()">Generate Sketch</button>
+        <div id="result"><p>Sketch will appear here.</p></div>
+    </div>
+
+    <script>
+        async function generateSketch() {
+            const description = document.getElementById("description").value;
+            if (!description.trim()) return;
+
+            document.getElementById("result").innerHTML = "<p>Generating...</p>";
+
+            const response = await fetch("/generate", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ description: description })
+            });
+
+            const data = await response.json();
+            document.getElementById("result").innerHTML = `<img src="${data.image}" alt="Generated Sketch">`;
+        }
+    </script>
+</body>
+</html>
